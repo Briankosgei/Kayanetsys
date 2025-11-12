@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayanet Management System</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Kayanet Farm</h1>
+                <div id="currentDate"></div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+            <div class="tabs">
+                <div class="tab active" data-tab="dashboard">Dashboard</div>
+                <div class="tab" data-tab="sheep">Animal Records</div>
+                <div class="tab" data-tab="financial">Financial Records</div>
+                <div class="tab" data-tab="health">Health & Weight</div>
+            </div>
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <h2 class="section-title">Kayanet Farm Overview</h2>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <h3>Total Animals</h3>
+                    <div class="stat-value" id="totalAnimals">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Sheep</h3>
+                    <div class="stat-value" id="totalSheep">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Goats</h3>
+                    <div class="stat-value" id="totalGoats">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Ewes (Female)</h3>
+                    <div class="stat-value" id="totalEwes">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Rams (Male)</h3>
+                    <div class="stat-value" id="totalRams">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Lambs/Kids</h3>
+                    <div class="stat-value" id="totalLambs">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Value (KSH)</h3>
+                    <div class="stat-value" id="totalValue">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Net Profit (KSH)</h3>
+                    <div class="stat-value" id="netProfit">0</div>
+                </div>
+            </div>
+            
+            <div class="alert alert-success" id="dashboardAlert"></div>
+            
+            <div class="filter-section">
+                <h3>Filter Recent Transactions</h3>
+                <div class="filter-form">
+                    <div class="form-group">
+                        <label for="dashboardAnimalType">Animal Type</label>
+                        <select id="dashboardAnimalType">
+                            <option value="all">All Animals</option>
+                            <option value="sheep">Sheep Only</option>
+                            <option value="goat">Goats Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dashboardPeriod">Period</label>
+                        <select id="dashboardPeriod">
+                            <option value="all">All Time</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="thisYear">This Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="dashboardCustomDateRange" style="display: none;">
+                        <label for="dashboardStartDate">Start Date</label>
+                        <input type="date" id="dashboardStartDate">
+                        <label for="dashboardEndDate">End Date</label>
+                        <input type="date" id="dashboardEndDate">
+                    </div>
+                    <button id="applyDashboardFilters">Apply Filters</button>
+                    <button id="clearDashboardFilters">Clear Filters</button>
+                </div>
+            </div>
+
+            <h2 class="section-title">Recent Transactions</h2>
+            <table id="recentTransactions">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Amount (KSH)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Transactions will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Animal Records Tab -->
+        <div id="sheep" class="tab-content">
+            <h2 class="section-title">Animal Records</h2>
+            
+            <div class="alert alert-success" id="sheepAlert"></div>
+            
+            <form id="sheepForm">
+                <div class="form-group">
+                    <label for="animalType">Animal Type</label>
+                    <select id="animalType" required>
+                        <option value="">Select Type</option>
+                        <option value="sheep">Sheep</option>
+                        <option value="goat">Goat</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sheepId">Animal ID</label>
+                    <input type="text" id="sheepId" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="additionType">Addition Type</label>
+                    <select id="additionType" required>
+                        <option value="">Select Type</option>
+                        <option value="birth">Birth</option>
+                        <option value="purchase">Purchase</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Ewe">Ewe (Female)</option>
+                        <option value="Ram">Ram (Male)</option>
+                        <option value="Doe">Doe (Female Goat)</option>
+                        <option value="Buck">Buck (Male Goat)</option>
+                        <option value="Lamb">Lamb (Young Sheep)</option>
+                        <option value="Kid">Kid (Young Goat)</option>
+                        <option value="Wether">Wether (Castrated)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthDate">Birth Date</label>
+                    <input type="date" id="birthDate">
+                </div>
+
+                <div class="form-group" id="purchaseCostGroup">
+                    <label for="purchaseCost">Purchase Cost (KSH)</label>
+                    <input type="number" id="purchaseCost" min="0" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="3"></textarea>
+                </div>
+                
+                <button type="submit">Add Animal</button>
+                <button type="button" id="clearForm">Clear Form</button>
+            </form>
+
+            <div class="filter-section">
+                <h3>Filter Animals</h3>
+                <div class="filter-form">
+                    <div class="form-group">
+                        <label for="animalTypeFilter">Animal Type</label>
+                        <select id="animalTypeFilter">
+                            <option value="all">All Animals</option>
+                            <option value="sheep">Sheep Only</option>
+                            <option value="goat">Goats Only</option>
+                        </select>
+                    </div>
+                    <button id="applyAnimalFilters">Apply Filters</button>
+                    <button id="clearAnimalFilters">Clear Filters</button>
+                </div>
+            </div>
+
+            <h2 class="section-title">All Animals</h2>
+            <table id="sheepTable">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>ID</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Purchase Cost</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Animal records will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Financial Records Tab -->
+        <div id="financial" class="tab-content">
+            <h2 class="section-title">Financial Records</h2>
+            
+            <div class="alert alert-success" id="financialAlert"></div>
+            
+            <form id="financialForm">
+                <div class="form-group">
+                    <label for="transactionType">Transaction Type</label>
+                    <select id="transactionType" required>
+                        <option value="">Select Type</option>
+                        <option value="sale">Sale</option>
+                        <option value="purchase">Purchase</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sheepIdFinancial">Animal ID (for sales)</label>
+                    <input type="text" id="sheepIdFinancial">
+                </div>
+                
+                <div class="form-group">
+                    <label for="amount">Amount (KSH)</label>
+                    <input type="number" id="amount" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="transactionDate">Date</label>
+                    <input type="date" id="transactionDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" rows="3" required></textarea>
+                </div>
+                
+                <button type="submit">Add Transaction</button>
+            </form>
+            
+            <h2 class="section-title">Financial Summary</h2>
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <h3>Total Sales (KSH)</h3>
+                    <div class="stat-value" id="totalSales">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Purchases (KSH)</h3>
+                    <div class="stat-value" id="totalPurchases">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Expenses (KSH)</h3>
+                    <div class="stat-value" id="totalExpenses">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Net Profit (KSH)</h3>
+                    <div class="stat-value" id="financialNetProfit">0</div>
+                </div>
+            </div>
+            
+            <div class="filter-section">
+                <h3>Filter Transactions</h3>
+                <div class="filter-form">
+                    <div class="form-group">
+                        <label for="financialAnimalType">Animal Type</label>
+                        <select id="financialAnimalType">
+                            <option value="all">All Animals</option>
+                            <option value="sheep">Sheep Only</option>
+                            <option value="goat">Goats Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionPeriod">Period</label>
+                        <select id="transactionPeriod">
+                            <option value="all">All Time</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="thisYear">This Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="customDateRange" style="display: none;">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate">
+                        <label for="endDate">End Date</label>
+                        <input type="date" id="endDate">
+                    </div>
+                    <button id="applyFinancialFilters">Apply Filters</button>
+                    <button id="clearFinancialFilters">Clear Filters</button>
+                </div>
+            </div>
+
+            <h2 class="section-title">All Transactions</h2>
+            <table id="financialTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Amount (KSH)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Financial records will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Health & Weight Tab -->
+        <div id="health" class="tab-content">
+            <h2 class="section-title">Health & Weight Records</h2>
+            
+            <div class="alert alert-success" id="healthAlert"></div>
+            
+            <form id="healthForm">
+                <div class="form-group">
+                    <label for="sheepIdHealth">Animal ID</label>
+                    <input type="text" id="sheepIdHealth" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="recordType">Record Type</label>
+                    <select id="recordType" required>
+                        <option value="">Select Type</option>
+                        <option value="weight">Weight</option>
+                        <option value="medication">Medication</option>
+                        <option value="vaccination">Vaccination</option>
+                        <option value="death">Death</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" min="0" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="medication">Medication Details</label>
+                    <textarea id="medication" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="recordDate">Date</label>
+                    <input type="date" id="recordDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="healthNotes">Notes</label>
+                    <textarea id="healthNotes" rows="3"></textarea>
+                </div>
+                
+                <button type="submit">Add Record</button>
+            </form>
+            
+            <h2 class="section-title">Health & Weight History</h2>
+            <table id="healthTable">
+                <thead>
+                    <tr>
+                        <th>Animal ID</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Weight (kg)</th>
+                        <th>Details</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Health records will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
